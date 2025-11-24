@@ -1,21 +1,16 @@
                                       precision    recall  f1-score   support
 
-    Angle Grinder Dataset Collection       0.00      0.00      0.00        80
-          Crowbar Dataset Collection       0.21      0.31      0.25        80
-  Digital Caliper Dataset Collection       0.56      0.11      0.19        80
-Electric Drill AI Dataset Collection       0.00      0.00      0.00        80
-                  Flashlight Dataset       0.00      0.00      0.00        80
-        Hammer AI Dataset Collection       0.13      0.23      0.17        80
-         Heat Gun Dataset Collection       0.14      0.26      0.18        80
-        Pliers AI Dataset Collection       0.12      0.14      0.13        80
-   Screwdriver AI Dataset Collection       0.14      0.36      0.20        80
-               Socket Wrench Dataset       0.15      0.30      0.20        80
-   Soldering Iron Dataset Collection       0.00      0.00      0.00        80
-                Tape Measure Dataset       0.00      0.00      0.00        80
-    Utility Knife Dataset Collection       0.08      0.33      0.13        80
-                  Wirecutter Dataset       0.00      0.00      0.00        80
-        Wrench AI Dataset Collection       0.00      0.00      0.00        80
+    Angle Grinder Dataset Collection       0.91      0.97      0.94        40
+  Digital Caliper Dataset Collection       0.84      0.95      0.89        39
+Electric Drill AI Dataset Collection       0.94      0.85      0.89        40
+        Hammer AI Dataset Collection       0.89      0.82      0.86        40
+        Pliers AI Dataset Collection       0.81      0.75      0.78        40
+   Screwdriver AI Dataset Collection       0.79      0.93      0.85        40
+               Socket Wrench Dataset       0.79      0.85      0.82        40
+                Tape Measure Dataset       0.93      0.95      0.94        40
+                  Wirecutter Dataset       0.88      0.53      0.66        40
+        Wrench AI Dataset Collection       0.79      0.93      0.85        40
 
-                            accuracy                           0.14      1200
-                           macro avg       0.10      0.14      0.10      1200
-                        weighted avg       0.10      0.14      0.10      1200
+                            accuracy                           0.85       399
+                           macro avg       0.86      0.85      0.85       399
+                        weighted avg       0.86      0.85      0.85       399

@@ -6,7 +6,7 @@ import traceback
 
 import tensorflow as tf
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
-from tensorflow.keras.callbacks import ModelCheckpoint
+from tensorflow.keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -20,7 +20,7 @@ MODEL_DIR = os.path.join(BASE_DIR, "Modelo")
 
 IMG_SIZE = 224
 BATCH_SIZE = 64
-EPOCHS = 50 
+EPOCHS = 100 
 
 
 def main():
@@ -44,8 +44,17 @@ def main():
         return
 
     # Generadores de datos
+    # Generadores de datos con Data Augmentation
+    # IMPORTANTE: No usamos rescale=1./255 porque MobileNetV2 tiene su propio preprocess_input
+    # que ya incluimos en el modelo.
     train_datagen = ImageDataGenerator(
-        rescale=1.0 / 255,
+        rotation_range=20,
+        width_shift_range=0.2,
+        height_shift_range=0.2,
+        shear_range=0.2,
+        zoom_range=0.2,
+        horizontal_flip=True,
+        fill_mode='nearest',
         validation_split=0.2
     )
 
@@ -93,12 +102,28 @@ def main():
     )
     # ==============================================
 
+    # Callbacks adicionales
+    early_stopping = EarlyStopping(
+        monitor='val_loss',
+        patience=10,
+        restore_best_weights=True,
+        verbose=1
+    )
+
+    reduce_lr = ReduceLROnPlateau(
+        monitor='val_loss',
+        factor=0.2,
+        patience=5,
+        min_lr=1e-6,
+        verbose=1
+    )
+
     print("Comenzando entrenamiento...")
     history = model.fit(
         train_ds,
         validation_data=val_ds,
         epochs=EPOCHS,
-        callbacks=[checkpoint_cb]
+        callbacks=[checkpoint_cb, early_stopping, reduce_lr]
     )
 
     os.makedirs(MODEL_DIR, exist_ok=True)
