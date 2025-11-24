@@ -1,386 +1,211 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Clasificador de Herramientas IA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clasificador inteligente de herramientas usando Deep Learning">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
+
     <style>
+        :root {
+            --background: #f5f5f7;
+            --surface: #ffffff;
+            --text-primary: #1d1d1f;
+            --text-secondary: #86868b;
+            --accent: #0066cc;
+            --accent-hover: #004499;
+            --border: #d2d2d7;
+            --success: #34c759;
+            --error: #ff3b30;
+            --radius: 18px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-        }
-
-        :root {
-            --primary: hsl(250, 84%, 54%);
-            --primary-dark: hsl(250, 84%, 44%);
-            --primary-light: hsl(250, 84%, 64%);
-            --secondary: hsl(280, 84%, 54%);
-            --accent: hsl(320, 84%, 54%);
-            --bg-dark: hsl(240, 21%, 15%);
-            --bg-card: hsl(240, 21%, 20%);
-            --bg-card-hover: hsl(240, 21%, 24%);
-            --text-primary: hsl(0, 0%, 98%);
-            --text-secondary: hsl(0, 0%, 70%);
-            --border: hsl(240, 15%, 30%);
-            --success: hsl(142, 76%, 45%);
-            --error: hsl(4, 90%, 58%);
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            --shadow-hover: 0 30px 80px rgba(0, 0, 0, 0.7);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, var(--bg-dark) 0%, hsl(260, 25%, 18%) 100%);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background);
             color: var(--text-primary);
+            line-height: 1.5;
             min-height: 100vh;
-            padding: 2rem 1rem;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: 
-                radial-gradient(circle at 20% 50%, hsla(250, 84%, 54%, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, hsla(280, 84%, 54%, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 40% 20%, hsla(320, 84%, 54%, 0.1) 0%, transparent 50%);
-            animation: pulse 20s ease-in-out infinite;
-            z-index: -1;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: translate(0, 0) rotate(0deg); }
-            25% { transform: translate(5%, 5%) rotate(90deg); }
-            50% { transform: translate(-5%, 5%) rotate(180deg); }
-            75% { transform: translate(-5%, -5%) rotate(270deg); }
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 20px;
         }
 
         .container {
-            max-width: 1400px;
-            margin: 0 auto;
+            max-width: 800px;
+            width: 100%;
+            animation: fadeIn 0.8s ease-out;
         }
 
         header {
             text-align: center;
-            margin-bottom: 3rem;
-            animation: fadeInDown 0.8s ease-out;
+            margin-bottom: 60px;
         }
 
         h1 {
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 800;
-            background: linear-gradient(135deg, var(--primary-light), var(--secondary), var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 0.5rem;
+            font-size: 48px;
+            font-weight: 700;
             letter-spacing: -0.02em;
+            margin-bottom: 12px;
         }
 
         .subtitle {
+            font-size: 21px;
             color: var(--text-secondary);
-            font-size: 1.1rem;
             font-weight: 400;
         }
 
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            animation: fadeInUp 0.8s ease-out 0.2s both;
-        }
-
-        @media (max-width: 968px) {
-            .main-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
         .card {
-            background: var(--bg-card);
-            border-radius: 24px;
-            padding: 2rem;
-            border: 1px solid var(--border);
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 40px;
             box-shadow: var(--shadow);
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 3px;
-            background: linear-gradient(90deg, var(--primary), var(--secondary), var(--accent));
-            opacity: 0;
-            transition: opacity 0.4s;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease;
         }
 
         .card:hover {
-            background: var(--bg-card-hover);
-            box-shadow: var(--shadow-hover);
-            transform: translateY(-4px);
+            transform: translateY(-2px);
         }
 
-        .card:hover::before {
-            opacity: 1;
-        }
-
-        .card-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .card-title::before {
-            content: '';
-            display: block;
-            width: 8px;
-            height: 8px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 50%;
-            box-shadow: 0 0 20px var(--primary);
-            animation: glow 2s ease-in-out infinite;
-        }
-
-        @keyframes glow {
-            0%, 100% { box-shadow: 0 0 20px var(--primary); }
-            50% { box-shadow: 0 0 30px var(--secondary); }
-        }
-
-        .file-upload-wrapper {
-            margin-bottom: 1.5rem;
-        }
-
-        .file-input-label {
-            display: block;
-            padding: 3rem 2rem;
-            background: linear-gradient(135deg, hsla(250, 84%, 25%, 0.3), hsla(280, 84%, 25%, 0.3));
+        .upload-area {
             border: 2px dashed var(--border);
-            border-radius: 16px;
+            border-radius: 12px;
+            padding: 60px 20px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
-            position: relative;
+            transition: all 0.3s ease;
+            background: #fafafa;
         }
 
-        .file-input-label:hover {
-            border-color: var(--primary);
-            background: linear-gradient(135deg, hsla(250, 84%, 30%, 0.4), hsla(280, 84%, 30%, 0.4));
-            transform: scale(1.02);
+        .upload-area:hover,
+        .upload-area.dragover {
+            border-color: var(--accent);
+            background: #f0f8ff;
         }
 
-        .file-input-label::before {
-            content: '📁';
+        .upload-icon {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 16px;
             display: block;
-            font-size: 3rem;
-            margin-bottom: 1rem;
+        }
+
+        .upload-text {
+            font-size: 17px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 14px;
+            color: var(--text-secondary);
         }
 
         input[type="file"] {
             display: none;
         }
 
-        .file-label-text {
-            display: block;
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
-
-        .file-label-text strong {
-            color: var(--primary-light);
-            display: block;
-            margin-bottom: 0.3rem;
-            font-size: 1.1rem;
-        }
-
         .btn {
-            width: 100%;
-            padding: 1rem 2rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--accent);
             color: white;
             border: none;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
+            padding: 14px 28px;
+            border-radius: 980px;
+            font-size: 17px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 10px 30px hsla(250, 84%, 54%, 0.3);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
+            transition: all 0.2s ease;
             width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-
-        .btn:hover::before {
-            left: 100%;
+            margin-top: 24px;
         }
 
         .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 15px 40px hsla(250, 84%, 54%, 0.4);
-        }
-
-        .btn:active {
-            transform: translateY(0);
+            background: var(--accent-hover);
+            transform: scale(1.01);
         }
 
         .btn:disabled {
             opacity: 0.5;
             cursor: not-allowed;
-            transform: none;
-        }
-
-        .preview-section {
-            margin-top: 2rem;
-        }
-
-        .preview-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
         }
 
         .preview-container {
-            background: var(--bg-dark);
-            border-radius: 16px;
-            padding: 1rem;
-            min-height: 300px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid var(--border);
-            overflow: hidden;
+            margin-top: 30px;
+            text-align: center;
+            display: none;
+        }
+
+        .preview-container.active {
+            display: block;
+            animation: slideDown 0.4s ease-out;
         }
 
         .preview-img {
             max-width: 100%;
             max-height: 400px;
-            object-fit: contain;
             border-radius: 12px;
-            transition: transform 0.3s;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .preview-img:hover {
-            transform: scale(1.05);
-        }
-
-        .preview-placeholder {
-            color: var(--text-secondary);
-            text-align: center;
-            opacity: 0.5;
-        }
-
-        /* Loading Animation */
-        .loading {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
-
-        .loading.active {
-            display: block;
-        }
-
-        .spinner {
-            width: 60px;
-            height: 60px;
-            margin: 0 auto 1rem;
-            border: 4px solid var(--border);
-            border-top: 4px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Result Styles */
-        .result-section {
+        .results-section {
             display: none;
         }
 
-        .result-section.active {
+        .results-section.active {
             display: block;
-            animation: fadeIn 0.5s;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .result-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .result-title {
+            font-size: 24px;
+            font-weight: 600;
         }
 
         .main-prediction {
-            background: linear-gradient(135deg, hsla(142, 76%, 25%, 0.3), hsla(142, 76%, 20%, 0.3));
-            border: 1px solid hsla(142, 76%, 45%, 0.5);
-            border-radius: 16px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .main-prediction::before {
-            content: '✓';
-            position: absolute;
-            top: -20px;
-            right: -20px;
-            font-size: 8rem;
-            color: hsla(142, 76%, 45%, 0.1);
+            text-align: center;
+            margin-bottom: 40px;
         }
 
         .pred-label {
-            font-size: 0.9rem;
+            font-size: 14px;
             color: var(--text-secondary);
-            margin-bottom: 0.3rem;
             text-transform: uppercase;
             letter-spacing: 0.05em;
+            margin-bottom: 8px;
         }
 
-        .pred-class {
-            font-size: 2rem;
+        .pred-value {
+            font-size: 36px;
             font-weight: 700;
-            color: var(--success);
-            margin-bottom: 0.5rem;
-        }
-
-        .pred-prob {
-            font-size: 1.5rem;
-            font-weight: 600;
             color: var(--text-primary);
+            margin-bottom: 8px;
         }
 
-        .top5-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-secondary);
+        .pred-confidence {
+            font-size: 19px;
+            color: var(--success);
+            font-weight: 500;
         }
 
         .top5-list {
@@ -388,259 +213,220 @@
         }
 
         .top5-item {
-            background: var(--bg-dark);
-            border: 1px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            transition: all 0.3s;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
         }
 
-        .top5-item:hover {
-            background: hsla(240, 21%, 25%, 1);
-            border-color: var(--primary);
-            transform: translateX(5px);
+        .top5-item:last-child {
+            border-bottom: none;
         }
 
-        .top5-rank {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        .rank {
+            width: 28px;
+            height: 28px;
+            background: #f0f0f0;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: 700;
-            margin-right: 1rem;
-            flex-shrink: 0;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-right: 16px;
         }
 
-        .top5-class {
+        .class-name {
             flex: 1;
+            font-size: 17px;
             font-weight: 500;
         }
 
-        .top5-prob {
-            font-weight: 700;
-            color: var(--primary-light);
-            font-size: 1.1rem;
+        .probability {
+            font-size: 17px;
+            color: var(--text-secondary);
+            font-feature-settings: "tnum";
         }
 
-        .error-message {
+        .loading {
             display: none;
-            background: linear-gradient(135deg, hsla(4, 90%, 30%, 0.3), hsla(4, 90%, 25%, 0.3));
-            border: 1px solid hsla(4, 90%, 58%, 0.5);
-            border-radius: 12px;
-            padding: 1.25rem;
-            color: var(--error);
-            margin-bottom: 1rem;
+            text-align: center;
+            padding: 40px;
         }
 
-        .error-message.active {
+        .loading.active {
             display: block;
-            animation: shake 0.5s;
         }
 
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-10px); }
-            75% { transform: translateX(10px); }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: var(--accent);
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
         }
 
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
+        @keyframes spin {
             to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+                transform: rotate(360deg);
             }
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .progress-bar {
-            height: 8px;
-            background: var(--bg-dark);
-            border-radius: 10px;
-            overflow: hidden;
-            margin-top: 0.5rem;
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--secondary));
-            border-radius: 10px;
-            transition: width 0.3s;
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 36px;
+            }
+
+            .card {
+                padding: 24px;
+            }
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <header>
-            <h1>🔧 Clasificador de Herramientas IA</h1>
-            <p class="subtitle">Identifica herramientas con tecnología de Deep Learning</p>
+            <h1>Clasificador IA</h1>
+            <p class="subtitle">Identificación inteligente de herramientas.</p>
         </header>
 
-        <div class="main-grid">
-            <!-- Upload Section -->
-            <div class="card">
-                <h2 class="card-title">Cargar Imagen</h2>
-                
-                <form id="upload-form">
-                    <div class="file-upload-wrapper">
-                        <label for="file-input" class="file-input-label" id="file-label">
-                            <span class="file-label-text">
-                                <strong>Selecciona una imagen</strong>
-                                o arrastra y suelta aquí
-                            </span>
-                        </label>
-                        <input type="file" id="file-input" name="file" accept="image/*" required>
-                    </div>
-
-                    <button type="submit" class="btn" id="btn-classify">
-                        🚀 Clasificar Herramienta
-                    </button>
-                </form>
-
-                <div class="preview-section">
-                    <h3 class="preview-title">Vista Previa</h3>
-                    <div class="preview-container" id="preview-container">
-                        <div class="preview-placeholder">
-                            📸 La imagen aparecerá aquí
-                        </div>
-                    </div>
+        <div class="card">
+            <form id="upload-form">
+                <div class="upload-area" id="drop-zone">
+                    <span class="upload-icon">📷</span>
+                    <p class="upload-text">Arrastra una imagen aquí</p>
+                    <p class="upload-subtext">o haz clic para seleccionar</p>
+                    <input type="file" id="file-input" name="file" accept="image/*" required>
                 </div>
+
+                <div class="preview-container" id="preview-container">
+                    <img id="preview-img" class="preview-img" src="" alt="Vista previa">
+                </div>
+
+                <button type="submit" class="btn" id="submit-btn" disabled>Analizar Imagen</button>
+            </form>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="color: var(--text-secondary);">Procesando imagen...</p>
+        </div>
+
+        <div class="card results-section" id="results">
+            <div class="result-header">
+                <h2 class="result-title">Resultados</h2>
             </div>
 
-            <!-- Results Section -->
-            <div class="card">
-                <h2 class="card-title">Resultados</h2>
+            <div class="main-prediction">
+                <div class="pred-label">Identificado como</div>
+                <div class="pred-value" id="main-class">-</div>
+                <div class="pred-confidence" id="main-conf">-</div>
+            </div>
 
-                <div class="error-message" id="error-msg"></div>
-
-                <div class="loading" id="loading">
-                    <div class="spinner"></div>
-                    <p>Analizando imagen con IA...</p>
-                </div>
-
-                <div class="result-section" id="result-section">
-                    <div class="main-prediction">
-                        <div class="pred-label">Clasificación Principal</div>
-                        <div class="pred-class" id="pred-class">-</div>
-                        <div class="pred-label">Confianza</div>
-                        <div class="pred-prob" id="pred-prob">-</div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <h3 class="top5-title">Top 5 Predicciones</h3>
-                    <ul class="top5-list" id="top5-list">
-                        <!-- Dynamic content -->
-                    </ul>
-                </div>
+            <div style="margin-top: 30px;">
+                <p class="pred-label" style="margin-bottom: 16px;">Otras posibilidades</p>
+                <ul class="top5-list" id="top5-list">
+                    <!-- Items will be injected here -->
+                </ul>
             </div>
         </div>
     </div>
 
     <script>
+        const dropZone = document.getElementById('drop-zone');
         const fileInput = document.getElementById('file-input');
-        const fileLabel = document.getElementById('file-label');
         const previewContainer = document.getElementById('preview-container');
+        const previewImg = document.getElementById('preview-img');
+        const submitBtn = document.getElementById('submit-btn');
         const uploadForm = document.getElementById('upload-form');
-        const btnClassify = document.getElementById('btn-classify');
         const loading = document.getElementById('loading');
-        const errorMsg = document.getElementById('error-msg');
-        const resultSection = document.getElementById('result-section');
-        const predClass = document.getElementById('pred-class');
-        const predProb = document.getElementById('pred-prob');
-        const progressFill = document.getElementById('progress-fill');
+        const results = document.getElementById('results');
+        const mainClass = document.getElementById('main-class');
+        const mainConf = document.getElementById('main-conf');
         const top5List = document.getElementById('top5-list');
 
-        // File input change handler
-        fileInput.addEventListener('change', handleFileSelect);
+        // Drag & Drop
+        dropZone.addEventListener('click', () => fileInput.click());
 
-        // Drag and drop handlers
-        fileLabel.addEventListener('dragover', (e) => {
+        dropZone.addEventListener('dragover', (e) => {
             e.preventDefault();
-            fileLabel.style.borderColor = 'var(--primary)';
-            fileLabel.style.background = 'linear-gradient(135deg, hsla(250, 84%, 30%, 0.5), hsla(280, 84%, 30%, 0.5))';
+            dropZone.classList.add('dragover');
         });
 
-        fileLabel.addEventListener('dragleave', () => {
-            fileLabel.style.borderColor = 'var(--border)';
-            fileLabel.style.background = 'linear-gradient(135deg, hsla(250, 84%, 25%, 0.3), hsla(280, 84%, 25%, 0.3))';
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
         });
 
-        fileLabel.addEventListener('drop', (e) => {
+        dropZone.addEventListener('drop', (e) => {
             e.preventDefault();
-            fileLabel.style.borderColor = 'var(--border)';
-            fileLabel.style.background = 'linear-gradient(135deg, hsla(250, 84%, 25%, 0.3), hsla(280, 84%, 25%, 0.3))';
-            
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                fileInput.files = files;
-                handleFileSelect();
+            dropZone.classList.remove('dragover');
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFile(fileInput.files[0]);
             }
         });
 
-        function handleFileSelect() {
-            const file = fileInput.files[0];
-            if (!file) return;
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                handleFile(fileInput.files[0]);
+            }
+        });
 
+        function handleFile(file) {
             if (!file.type.startsWith('image/')) {
-                showError('Por favor selecciona una imagen válida');
+                alert('Por favor sube una imagen válida.');
                 return;
             }
 
             const reader = new FileReader();
             reader.onload = (e) => {
-                previewContainer.innerHTML = `<img src="${e.target.result}" class="preview-img" alt="Preview">`;
+                previewImg.src = e.target.result;
+                previewContainer.classList.add('active');
+                submitBtn.disabled = false;
+
+                // Reset results
+                results.classList.remove('active');
             };
             reader.readAsDataURL(file);
-
-            // Update label text
-            const fileName = file.name;
-            fileLabel.querySelector('.file-label-text').innerHTML = `<strong>${fileName}</strong>Imagen seleccionada`;
         }
 
-        // Form submission
         uploadForm.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const file = fileInput.files[0];
-            if (!file) {
-                showError('Por favor selecciona una imagen');
-                return;
-            }
+            const formData = new FormData(uploadForm);
 
-            // Hide previous results and errors
-            hideError();
-            resultSection.classList.remove('active');
+            // UI State: Loading
+            submitBtn.disabled = true;
             loading.classList.add('active');
-            btnClassify.disabled = true;
-
-            const formData = new FormData();
-            formData.append('file', file);
+            results.classList.remove('active');
 
             try {
                 const response = await fetch('/predict', {
@@ -650,62 +436,44 @@
 
                 const data = await response.json();
 
-                loading.classList.remove('active');
-                btnClassify.disabled = false;
-
                 if (data.error) {
-                    showError(data.error);
-                    return;
+                    throw new Error(data.error);
                 }
 
-                // Display results
                 displayResults(data);
 
             } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
                 loading.classList.remove('active');
-                btnClassify.disabled = false;
-                showError('Error al comunicarse con el servidor: ' + error.message);
+                submitBtn.disabled = false;
             }
         });
 
         function displayResults(data) {
-            // Main prediction
-            predClass.textContent = data.pred_class;
-            const probPercent = (data.pred_prob * 100).toFixed(2);
-            predProb.textContent = `${probPercent}%`;
-            progressFill.style.width = probPercent + '%';
+            mainClass.textContent = data.pred_class;
+            mainConf.textContent = (data.pred_prob * 100).toFixed(1) + '% de confianza';
 
-            // Top 5 predictions
             top5List.innerHTML = '';
-            if (data.top5 && Array.isArray(data.top5)) {
-                data.top5.forEach((item, index) => {
-                    const li = document.createElement('li');
-                    li.className = 'top5-item';
-                    li.style.animationDelay = `${index * 0.1}s`;
-                    
-                    const prob = (item.prob * 100).toFixed(2);
-                    
-                    li.innerHTML = `
-                        <span class="top5-rank">${index + 1}</span>
-                        <span class="top5-class">${item.class}</span>
-                        <span class="top5-prob">${prob}%</span>
-                    `;
-                    
-                    top5List.appendChild(li);
-                });
-            }
 
-            resultSection.classList.add('active');
-        }
+            // Skip the first one as it is the main prediction
+            const others = data.top5.slice(1);
 
-        function showError(message) {
-            errorMsg.textContent = message;
-            errorMsg.classList.add('active');
-        }
+            others.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.className = 'top5-item';
+                li.innerHTML = `
+                    <div class="rank">${index + 2}</div>
+                    <div class="class-name">${item.class}</div>
+                    <div class="probability">${(item.prob * 100).toFixed(1)}%</div>
+                `;
+                top5List.appendChild(li);
+            });
 
-        function hideError() {
-            errorMsg.classList.remove('active');
+            results.classList.add('active');
+            results.scrollIntoView({ behavior: 'smooth', block: 'start' });
         }
     </script>
 </body>
+
 </html>
