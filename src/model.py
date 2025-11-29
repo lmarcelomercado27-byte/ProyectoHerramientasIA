@@ -15,15 +15,23 @@ def build_model(num_classes, img_size):
         weights="imagenet"
     )
 
-    # No entrenar la base al inicio
-    base_model.trainable = False
+    # Descongelar las capas superiores para fine-tuning
+    base_model.trainable = True
+    
+    # Congelar todas las capas excepto las últimas 50
+    for layer in base_model.layers[:-50]:
+        layer.trainable = False
 
     inputs = tf.keras.Input(shape=(img_size, img_size, 3))
+    
+    # IMPORTANTE: Usar la función de preprocesamiento de MobileNetV2
+    # Esta función espera valores [0, 255] y los escala a [-1, 1]
     x = tf.keras.applications.mobilenet_v2.preprocess_input(inputs)
-    x = base_model(x, training=False)
+    
+    x = base_model(x, training=False) # training=False es importante para BatchNorm
 
     x = layers.GlobalAveragePooling2D()(x)
-    x = layers.Dropout(0.3)(x)
+    x = layers.Dropout(0.4)(x)  # Aumentar dropout un poco
     outputs = layers.Dense(num_classes, activation="softmax")(x)
 
     model = models.Model(inputs=inputs, outputs=outputs)
