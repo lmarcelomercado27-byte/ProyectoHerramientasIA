@@ -94,12 +94,10 @@
         video {
             transform: scaleX(-1);
             display: none;
-            /* Hidden by default */
         }
 
         img.uploaded-view {
             display: none;
-            /* Hidden by default */
         }
 
         /* Selection Screen */
@@ -148,6 +146,43 @@
 
         .secondary-btn:hover {
             background: #f0f8ff;
+        }
+
+        /* Overlays */
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            font-weight: 600;
+            display: none;
+            z-index: 10;
+        }
+
+        .bounding-box {
+            position: absolute;
+            border: 3px solid #34c759;
+            box-shadow: 0 0 10px rgba(52, 199, 89, 0.5);
+            display: none;
+            z-index: 5;
+            pointer-events: none;
+        }
+
+        .bounding-box-label {
+            position: absolute;
+            top: -30px;
+            left: -3px;
+            background: #34c759;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
         }
 
         /* Bottom Navigation */
@@ -319,6 +354,12 @@
             <video id="webcam" autoplay playsinline muted></video>
             <img id="uploaded-image" class="uploaded-view" alt="Imagen subida">
 
+            <!-- Overlays -->
+            <div class="loader" id="loader">Analizando...</div>
+            <div class="bounding-box" id="bounding-box">
+                <div class="bounding-box-label" id="box-label">Herramienta 99%</div>
+            </div>
+
             <button class="back-btn" id="back-btn" onclick="resetView()">← Volver</button>
             <input type="file" id="file-input" accept="image/*" onchange="handleFileUpload(this)">
         </div>
@@ -377,6 +418,9 @@
         const uploadedImage = document.getElementById('uploaded-image');
         const backBtn = document.getElementById('back-btn');
         const fileInput = document.getElementById('file-input');
+        const loader = document.getElementById('loader');
+        const boundingBox = document.getElementById('bounding-box');
+        const boxLabel = document.getElementById('box-label');
 
         let stream = null;
         let isDetecting = false;
@@ -422,11 +466,47 @@
                     uploadedImage.style.display = 'block';
                     backBtn.style.display = 'block';
 
-                    // Here we would trigger a single detection for the image
-                    console.log("Analizando imagen estática...");
+                    // Start Simulation
+                    simulateDetection();
                 }
                 reader.readAsDataURL(input.files[0]);
             }
+        }
+
+        function simulateDetection() {
+            // 1. Show loader
+            loader.style.display = 'block';
+            boundingBox.style.display = 'none';
+
+            // 2. Wait 2 seconds
+            setTimeout(() => {
+                loader.style.display = 'none';
+
+                // 3. Randomize result
+                const randomTool = detectableTools[Math.floor(Math.random() * detectableTools.length)];
+                const confidence = Math.floor(Math.random() * (99 - 80 + 1)) + 80; // 80-99%
+
+                // 4. Randomize box position (Centered and Large)
+                // Top/Left: 10-15%
+                const top = 10 + Math.random() * 5;
+                const left = 10 + Math.random() * 5;
+
+                // Width/Height: 60-80%
+                const width = 60 + Math.random() * 20;
+                const height = 60 + Math.random() * 20;
+
+                boundingBox.style.top = top + '%';
+                boundingBox.style.left = left + '%';
+                boundingBox.style.width = width + '%';
+                boundingBox.style.height = height + '%';
+
+                boxLabel.textContent = `${randomTool} ${confidence}%`;
+                boundingBox.style.display = 'block';
+
+                // 5. Log to PEAS
+                addPeasLog('Performance', `Detección completada: Se identificó ${randomTool} con ${confidence}% de precisión.`);
+
+            }, 2000);
         }
 
         function resetView() {
@@ -441,6 +521,8 @@
             webcam.style.display = 'none';
             uploadedImage.style.display = 'none';
             backBtn.style.display = 'none';
+            loader.style.display = 'none';
+            boundingBox.style.display = 'none';
             selectionScreen.style.display = 'flex';
             fileInput.value = ''; // Reset file input
         }
@@ -476,12 +558,18 @@
 
         function populatePEAS() {
             const log = document.getElementById('peas-log');
+            log.innerHTML = ''; // Clear existing
             peasData.forEach(entry => {
                 const div = document.createElement('div');
                 div.className = 'log-entry';
                 div.innerHTML = `<span class="log-label">[${entry.type}]</span> ${entry.msg}`;
                 log.appendChild(div);
             });
+        }
+
+        function addPeasLog(type, msg) {
+            peasData.unshift({ type, msg }); // Add to beginning
+            populatePEAS();
         }
 
         // --- Detection Placeholder ---

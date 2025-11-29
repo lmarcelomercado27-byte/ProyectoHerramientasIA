@@ -15,7 +15,7 @@ from tensorflow.keras.applications.mobilenet_v2 import preprocess_input
 # Configuración
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 MODEL_DIR = os.path.join(BASE_DIR, "Modelo")
-MODEL_PATH = os.path.join(MODEL_DIR, "herramientas.h5")
+MODEL_PATH = os.path.join(MODEL_DIR, "mi_modelo_final.h5")
 LABELS_PATH = os.path.join(MODEL_DIR, "labels.json")
 UPLOAD_FOLDER = os.path.join(BASE_DIR, "uploads")
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif', 'bmp', 'webp'}

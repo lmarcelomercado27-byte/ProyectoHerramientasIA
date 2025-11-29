@@ -20,7 +20,7 @@ MODEL_DIR = os.path.join(BASE_DIR, "Modelo")
 
 IMG_SIZE = 224
 BATCH_SIZE = 64
-EPOCHS = 100 
+EPOCHS = 20
 
 
 def main():
@@ -32,7 +32,7 @@ def main():
 
     # Comprobar que existe el dataset
     if not os.path.isdir(DATASET_DIR):
-        print("ERROR: La carpeta 'dataset' NO existe.")
+        print("ERROR: La carpeta 'DataSet' NO existe.")
         return
 
     subdirs = [d for d in os.listdir(DATASET_DIR)
@@ -40,13 +40,11 @@ def main():
     print("Subcarpetas encontradas en dataset:", subdirs)
 
     if not subdirs:
-        print("ERROR: 'dataset' no tiene subcarpetas (clases).")
+        print("ERROR: 'DataSet' no tiene subcarpetas (clases).")
         return
 
-    # Generadores de datos
-    # Generadores de datos con Data Augmentation
-    # IMPORTANTE: No usamos rescale=1./255 porque MobileNetV2 tiene su propio preprocess_input
-    # que ya incluimos en el modelo.
+    # ================= GENERADORES =================
+    # Entrenamiento: con data augmentation
     train_datagen = ImageDataGenerator(
         rotation_range=20,
         width_shift_range=0.2,
@@ -54,7 +52,12 @@ def main():
         shear_range=0.2,
         zoom_range=0.2,
         horizontal_flip=True,
-        fill_mode='nearest',
+        fill_mode="nearest",
+        validation_split=0.2
+    )
+
+    # Validación: sin augmentation
+    val_datagen = ImageDataGenerator(
         validation_split=0.2
     )
 
@@ -70,7 +73,7 @@ def main():
     )
 
     # Para métricas correctas usamos shuffle=False en validación
-    val_ds = train_datagen.flow_from_directory(
+    val_ds = val_datagen.flow_from_directory(
         DATASET_DIR,
         subset="validation",
         seed=42,
@@ -89,7 +92,7 @@ def main():
     print("Construyendo modelo...")
     model = build_model(num_classes, IMG_SIZE)
 
-    # ================= CHECKPOINTS =================
+    # ================= CHECKPOINTS Y CALLBACKS =================
     checkpoint_dir = os.path.join(MODEL_DIR, "checkpoints")
     os.makedirs(checkpoint_dir, exist_ok=True)
     checkpoint_path = os.path.join(checkpoint_dir, "cp-{epoch:02d}.weights.h5")
@@ -100,23 +103,22 @@ def main():
         save_best_only=False,
         verbose=1
     )
-    # ==============================================
 
-    # Callbacks adicionales
     early_stopping = EarlyStopping(
-        monitor='val_loss',
-        patience=10,
+        monitor="val_loss",
+        patience=5,
         restore_best_weights=True,
         verbose=1
     )
 
     reduce_lr = ReduceLROnPlateau(
-        monitor='val_loss',
+        monitor="val_loss",
         factor=0.2,
-        patience=5,
+        patience=3,
         min_lr=1e-6,
         verbose=1
     )
+    # ==========================================================
 
     print("Comenzando entrenamiento...")
     history = model.fit(
@@ -142,7 +144,6 @@ def main():
 
     # ========== MÉTRICAS Y GRÁFICOS ==========
 
-    # Curvas de training
     acc = history.history.get("accuracy", [])
     val_acc = history.history.get("val_accuracy", [])
     loss = history.history.get("loss", [])
