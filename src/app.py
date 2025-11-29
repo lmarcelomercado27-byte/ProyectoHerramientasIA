@@ -91,7 +91,6 @@ def prepare_image(img_path):
     img = image.load_img(img_path, target_size=(IMG_SIZE, IMG_SIZE))
     img_array = image.img_to_array(img)
     img_array = np.expand_dims(img_array, axis=0)
-    img_array = preprocess_input(img_array)
     return img_array
 
 
@@ -156,7 +155,7 @@ def predict():
         # Limpiar archivo temporal (opcional)
         try:
             os.remove(filepath)
-        except:
+        except Exception:
             pass
         
         # Devolver resultado
