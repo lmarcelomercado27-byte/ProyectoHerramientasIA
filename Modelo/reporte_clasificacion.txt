@@ -1,21 +1,21 @@
                                       precision    recall  f1-score   support
 
-    Angle Grinder Dataset Collection       0.94      0.99      0.96        80
-          Crowbar Dataset Collection       0.83      0.96      0.89        80
-  Digital Caliper Dataset Collection       0.93      0.99      0.96        80
-Electric Drill AI Dataset Collection       0.94      0.82      0.88        80
+    Angle Grinder Dataset Collection       0.90      0.94      0.92        80
+          Crowbar Dataset Collection       0.90      0.78      0.83        80
+  Digital Caliper Dataset Collection       0.88      1.00      0.94        80
+Electric Drill AI Dataset Collection       0.94      0.94      0.94        80
                   Flashlight Dataset       0.99      0.95      0.97        80
-        Hammer AI Dataset Collection       0.84      0.94      0.89        80
-         Heat Gun Dataset Collection       0.86      0.96      0.91        80
-        Pliers AI Dataset Collection       0.86      0.88      0.87        80
-   Screwdriver AI Dataset Collection       0.83      0.99      0.90        80
-               Socket Wrench Dataset       0.87      0.60      0.71        80
-   Soldering Iron Dataset Collection       0.97      0.91      0.94        80
-                Tape Measure Dataset       0.96      0.99      0.98        80
-    Utility Knife Dataset Collection       0.89      0.94      0.91        80
-                  Wirecutter Dataset       0.96      0.62      0.76        80
-        Wrench AI Dataset Collection       0.85      0.94      0.89        80
+        Hammer AI Dataset Collection       0.92      0.90      0.91        80
+         Heat Gun Dataset Collection       0.94      0.95      0.94        80
+        Pliers AI Dataset Collection       0.90      0.89      0.89        80
+   Screwdriver AI Dataset Collection       0.95      0.91      0.93        80
+               Socket Wrench Dataset       0.85      0.65      0.74        80
+   Soldering Iron Dataset Collection       0.96      0.90      0.93        80
+                Tape Measure Dataset       0.93      0.99      0.96        80
+    Utility Knife Dataset Collection       0.96      0.93      0.94        80
+                  Wirecutter Dataset       0.86      0.81      0.83        80
+        Wrench AI Dataset Collection       0.68      0.94      0.79        80
 
                             accuracy                           0.90      1200
-                           macro avg       0.90      0.90      0.89      1200
-                        weighted avg       0.90      0.90      0.89      1200
+                           macro avg       0.90      0.90      0.90      1200
+                        weighted avg       0.90      0.90      0.90      1200

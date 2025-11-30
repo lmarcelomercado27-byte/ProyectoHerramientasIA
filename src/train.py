@@ -20,7 +20,7 @@ MODEL_DIR = os.path.join(BASE_DIR, "Modelo")
 
 IMG_SIZE = 224
 BATCH_SIZE = 64
-EPOCHS = 10
+EPOCHS = 15
 
 
 def main():
