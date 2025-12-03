@@ -145,14 +145,10 @@
             margin-top: 30px;
             text-align: center;
             display: none;
-            /* Hacemos que el contenedor de la foto tenga el mismo “marco”
-       que la cámara en vivo */
             width: 100%;
             max-height: 320px;
-            /* igual que .camera-view-wrapper */
             border-radius: 12px;
             overflow: hidden;
-            /* recorta la imagen si se pasa */
             margin-left: auto;
             margin-right: auto;
         }
@@ -165,9 +161,7 @@
         .preview-img {
             width: 100%;
             height: 100%;
-            /* llena el contenedor como el video */
             object-fit: cover;
-            /* mismo comportamiento que la cámara */
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             display: block;
@@ -571,7 +565,7 @@
 
         .dashboard-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(4, 1fr);
             gap: 20px;
             margin-bottom: 30px;
         }
@@ -605,6 +599,137 @@
             margin-bottom: 6px;
             display: flex;
             justify-content: space-between;
+        }
+
+        /* Feedback Buttons */
+        .btn-action {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+            background: white;
+            cursor: pointer;
+            margin-right: 4px;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .btn-action:hover {
+            background: #f0f0f0;
+        }
+
+        .btn-success {
+            color: var(--success);
+            border-color: var(--success);
+        }
+
+        .btn-success:hover {
+            background: #e8f5e9;
+        }
+
+        .btn-danger {
+            color: var(--error);
+            border-color: var(--error);
+        }
+
+        .btn-danger:hover {
+            background: #ffebee;
+        }
+
+        .btn-action:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .status-icon {
+            font-weight: bold;
+            margin-left: 4px;
+        }
+
+        .status-correct {
+            color: var(--success);
+        }
+
+        .status-incorrect {
+            color: var(--error);
+        }
+
+        /* Model Health Cards (Dark Theme) */
+        .model-health-section {
+            margin-bottom: 30px;
+        }
+
+        .model-health-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .model-card {
+            background: #1c1c1e;
+            /* Dark background */
+            color: #ffffff;
+            padding: 24px;
+            border-radius: 16px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+            transition: transform 0.3s ease;
+        }
+
+        .model-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .model-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #30d158, #0a84ff);
+        }
+
+        .model-card-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.6);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .model-card-value {
+            font-size: 36px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(180deg, #fff, #e5e5e5);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .model-version-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 12px;
+            border-radius: 99px;
+            font-size: 12px;
+            font-weight: 500;
+            color: #fff;
+            margin-top: 8px;
+        }
+
+        /* Tooltip simple */
+        .info-icon {
+            cursor: help;
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .info-icon:hover {
+            opacity: 1;
         }
     </style>
 </head>
@@ -688,6 +813,49 @@
             </div>
         </div>
 
+        <!-- Model Performance Section (Training Metrics) -->
+        <div class="card model-health-section">
+            <h3 class="history-title" style="margin-bottom: 20px; display: flex; align-items: center; gap: 10px;">
+                <span>🧠 Calidad del Modelo</span>
+                <span class="model-version-badge" id="model-version-badge">v2.4</span>
+            </h3>
+
+            <div class="model-health-grid">
+                <div class="model-card">
+                    <div class="model-card-label">
+                        Precisión Global
+                        <span class="info-icon"
+                            title="Qué tan confiables son las detecciones del modelo (Training)">ⓘ</span>
+                    </div>
+                    <div class="model-card-value" id="model-precision">-</div>
+                </div>
+
+                <div class="model-card">
+                    <div class="model-card-label">
+                        Recall Global
+                        <span class="info-icon"
+                            title="Cuántas herramientas reales es capaz de encontrar (Training)">ⓘ</span>
+                    </div>
+                    <div class="model-card-value" id="model-recall">-</div>
+                </div>
+
+                <div class="model-card">
+                    <div class="model-card-label">
+                        F1-Score
+                        <span class="info-icon" title="Balance entre Precisión y Recall">ⓘ</span>
+                    </div>
+                    <div class="model-card-value" id="model-f1">-</div>
+                </div>
+
+                <div class="model-card" style="background: linear-gradient(135deg, #0066cc, #004499);">
+                    <div class="model-card-label" style="color: rgba(255,255,255,0.9);">Estado</div>
+                    <div class="model-card-value" style="font-size: 24px; -webkit-text-fill-color: white;">Óptimo</div>
+                    <div style="font-size: 13px; color: rgba(255,255,255,0.8); margin-top: 4px;">Listo para producción
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Dashboard Section -->
         <div class="card dashboard-section" id="dashboard-section">
             <h3 class="history-title" style="margin-bottom: 20px;">Estadísticas de Sesión</h3>
@@ -696,6 +864,14 @@
                 <div class="metric-card">
                     <div class="metric-value" id="global-score">-</div>
                     <div class="metric-label">Score Global del Modelo</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="precision-score">-</div>
+                    <div class="metric-label">Precisión</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-value" id="recall-score">-</div>
+                    <div class="metric-label">Sensibilidad (Recall)</div>
                 </div>
                 <div class="metric-card">
                     <div class="metric-label" style="margin-bottom: 10px; font-weight: 600;">Top 3 Clases</div>
@@ -724,6 +900,7 @@
                         <th>Última Hora</th>
                         <th>Confianza</th>
                         <th>Cantidad</th>
+                        <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody id="history-body">
@@ -754,12 +931,41 @@
         // Dashboard Elements
         const dashboardSection = document.getElementById('dashboard-section');
         const globalScoreEl = document.getElementById('global-score');
+        const precisionScoreEl = document.getElementById('precision-score');
+        const recallScoreEl = document.getElementById('recall-score');
         const top3DashboardEl = document.getElementById('top3-dashboard');
         const ctx = document.getElementById('metricsChart').getContext('2d');
 
-        let detectedTools = []; // Array of { toolName, lastSeen, quantity, confidence, accumulatedConfidence }
+        // Model Static Metrics Elements
+        const modelPrecisionEl = document.getElementById('model-precision');
+        const modelRecallEl = document.getElementById('model-recall');
+        const modelF1El = document.getElementById('model-f1');
+        const modelVersionBadge = document.getElementById('model-version-badge');
+
+        // --- STATIC MODEL DATA (Mock Data) ---
+        const modelMetrics = {
+            precision: 0.945,
+            recall: 0.912,
+            f1: 0.928,
+            version: "v2.4 - YOLOv8"
+        };
+
+        // Render Static Metrics
+        function renderModelMetrics() {
+            if (modelPrecisionEl) modelPrecisionEl.textContent = (modelMetrics.precision * 100).toFixed(1) + '%';
+            if (modelRecallEl) modelRecallEl.textContent = (modelMetrics.recall * 100).toFixed(1) + '%';
+            if (modelF1El) modelF1El.textContent = (modelMetrics.f1 * 100).toFixed(1) + '%';
+            if (modelVersionBadge) modelVersionBadge.textContent = modelMetrics.version;
+        }
+
+        // Call immediately
+        renderModelMetrics();
+
+        let detectedTools = []; // Array of { id, toolName, lastSeen, quantity, confidence, accumulatedConfidence, status }
         let totalDetectionsSession = 0;
         let totalConfidenceSession = 0;
+        let totalTP = 0;
+        let totalFP = 0;
         let metricsChart = null;
 
         // Elementos de cámara
@@ -916,11 +1122,13 @@
             } else {
                 // Case B: Add new
                 const newEntry = {
+                    id: Date.now(),
                     toolName: toolName,
                     lastSeen: now,
                     quantity: 1,
                     confidence: confidence,
-                    accumulatedConfidence: confidence // Initialize accumulator
+                    accumulatedConfidence: confidence, // Initialize accumulator
+                    status: 'pending'
                 };
                 detectedTools.unshift(newEntry);
             }
@@ -929,14 +1137,37 @@
             updateDashboard();
         }
 
+        function markFeedback(id, type) {
+            const item = detectedTools.find(t => t.id === id);
+            if (!item || item.status !== 'pending') return;
+
+            item.status = type;
+
+            if (type === 'correct') {
+                totalTP++;
+            } else {
+                totalFP++;
+            }
+
+            updateDashboard();
+            renderHistoryTable();
+        }
+
         function updateDashboard() {
             dashboardSection.classList.add('active');
 
             // 1. Global Score
-            const globalAvg = (totalConfidenceSession / totalDetectionsSession) * 100;
+            const globalAvg = totalDetectionsSession > 0 ? (totalConfidenceSession / totalDetectionsSession) * 100 : 0;
             globalScoreEl.textContent = globalAvg.toFixed(1) + '%';
 
-            // 2. Top 3 Classes
+            // 2. Precision & Recall
+            const precision = (totalTP + totalFP) > 0 ? (totalTP / (totalTP + totalFP)) * 100 : 0;
+            const recall = precision; // Simplified as requested
+
+            if (precisionScoreEl) precisionScoreEl.textContent = (totalTP + totalFP) > 0 ? precision.toFixed(1) + '%' : '-';
+            if (recallScoreEl) recallScoreEl.textContent = (totalTP + totalFP) > 0 ? recall.toFixed(1) + '%' : '-';
+
+            // 3. Top 3 Classes
             // Clone array to sort without affecting history order
             const sortedByCount = [...detectedTools].sort((a, b) => b.quantity - a.quantity).slice(0, 3);
 
@@ -952,7 +1183,7 @@
                 top3DashboardEl.appendChild(li);
             });
 
-            // 3. Chart Update
+            // 4. Chart Update
             updateChart();
         }
 
@@ -1018,15 +1249,27 @@
 
             detectedTools.forEach(item => {
                 const tr = document.createElement('tr');
-
                 const timeString = item.lastSeen.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
                 const confPercent = (item.confidence * 100).toFixed(1) + '%';
+
+                let actionsHtml = '';
+                if (item.status === 'pending') {
+                    actionsHtml = `
+                        <button class="btn-action btn-success" onclick="markFeedback(${item.id}, 'correct')" title="Correcto">✓</button>
+                        <button class="btn-action btn-danger" onclick="markFeedback(${item.id}, 'incorrect')" title="Incorrecto">✗</button>
+                    `;
+                } else if (item.status === 'correct') {
+                    actionsHtml = `<span class="status-icon status-correct">✓ Confirmado</span>`;
+                } else if (item.status === 'incorrect') {
+                    actionsHtml = `<span class="status-icon status-incorrect">✗ Incorrecto</span>`;
+                }
 
                 tr.innerHTML = `
                     <td style="font-weight: 500;">${item.toolName}</td>
                     <td style="color: var(--text-secondary);">${timeString}</td>
                     <td style="font-family: monospace;">${confPercent}</td>
                     <td><span class="badge-count">${item.quantity}</span></td>
+                    <td>${actionsHtml}</td>
                 `;
                 historyBody.appendChild(tr);
             });
@@ -1049,6 +1292,7 @@
                 captureBtn.disabled = false;
                 liveToggleBtn.disabled = false;
                 liveStatus.textContent = 'Cámara iniciada. Modo en vivo apagado.';
+
             } catch (err) {
                 console.error(err);
                 alert('No se pudo acceder a la cámara. Verifica los permisos del navegador.');
@@ -1092,6 +1336,7 @@
             isPredictingLive = false;
             liveToggleBtn.classList.remove('live-on');
             liveToggleBtn.textContent = 'Modo en vivo';
+
             if (cameraStream) {
                 liveStatus.textContent = 'Cámara iniciada. Modo en vivo apagado.';
             } else {
@@ -1105,6 +1350,7 @@
 
             const videoWidth = video.videoWidth || 0;
             const videoHeight = video.videoHeight || 0;
+
             if (videoWidth === 0 || videoHeight === 0) {
                 return;
             }
@@ -1134,12 +1380,12 @@
                     });
 
                     const data = await response.json();
+
                     if (data.error) {
                         console.error(data.error);
                         liveStatus.textContent = 'Error en modo en vivo';
                     } else {
                         const prob = data.pred_prob;
-
                         if (prob < LIVE_CONF_THRESHOLD) {
                             // Confianza baja: asumimos que no hay herramienta clara
                             liveClass.textContent = 'Sin herramienta detectada';
@@ -1152,6 +1398,7 @@
                             liveStatus.textContent = 'Analizando en tiempo real...';
                         }
                     }
+
                 } catch (err) {
                     console.error(err);
                     liveStatus.textContent = 'Error en modo en vivo';
@@ -1209,18 +1456,19 @@
             ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
 
             canvas.toBlob((blob) => {
-                if (!blob) {
-                    alert('No se pudo capturar la imagen.');
-                    return;
+                if (blob) {
+                    const file = new File([blob], "capture.png", { type: "image/png" });
+                    // Usamos la misma función que el input de archivo
+                    handleFile(file);
+
+                    // Asignamos al input por si el usuario quiere enviar
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    fileInput.files = dataTransfer.files;
+
+                    // Cerramos cámara para ver el preview
+                    stopCamera();
                 }
-
-                const file = new File([blob], 'captura.png', { type: 'image/png' });
-
-                const dt = new DataTransfer();
-                dt.items.add(file);
-                fileInput.files = dt.files;
-
-                handleFile(file);
             }, 'image/png');
         });
     </script>
