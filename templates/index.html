@@ -6,7 +6,7 @@
     <title>Clasificador de Herramientas IA</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Clasificador inteligente de herramientas usando Deep Learning">
- <style>
+    <style>
         :root {
             --background: #f5f5f7;
             --surface: #ffffff;
@@ -28,14 +28,14 @@
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
         }
-        
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--background);
             color: var(--text-primary);
             line-height: 1.5;
             min-height: 100vh;
-             display: flex;
+            display: flex;
             flex-direction: column;
             align-items: center;
             padding: 40px 20px;
@@ -51,6 +51,7 @@
             text-align: center;
             margin-bottom: 60px;
         }
+
         h1 {
             font-size: 48px;
             font-weight: 700;
@@ -63,6 +64,7 @@
             color: var(--text-secondary);
             font-weight: 400;
         }
+
         .card {
             background: var(--surface);
             border-radius: var(--radius);
@@ -71,9 +73,11 @@
             margin-bottom: 30px;
             transition: transform 0.3s ease;
         }
-         .card:hover {
+
+        .card:hover {
             transform: translateY(-2px);
         }
+
         .upload-area {
             border: 2px dashed var(--border);
             border-radius: 12px;
@@ -83,29 +87,35 @@
             transition: all 0.3s ease;
             background: #fafafa;
         }
+
         .upload-area:hover,
         .upload-area.dragover {
             border-color: var(--accent);
             background: #f0f8ff;
         }
+
         .upload-icon {
             font-size: 48px;
             color: var(--accent);
             margin-bottom: 16px;
             display: block;
         }
+
         .upload-text {
             font-size: 17px;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
+
         .upload-subtext {
             font-size: 14px;
             color: var(--text-secondary);
         }
+
         input[type="file"] {
             display: none;
         }
+
         .btn {
             background: var(--accent);
             color: white;
@@ -119,8 +129,9 @@
             width: 100%;
             margin-top: 24px;
         }
+
         .btn:hover {
-             background: var(--accent-hover);
+            background: var(--accent-hover);
             transform: scale(1.01);
         }
 
@@ -128,29 +139,48 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
         .preview-container {
             margin-top: 30px;
             text-align: center;
             display: none;
+            /* Hacemos que el contenedor de la foto tenga el mismo “marco”
+       que la cámara en vivo */
+            width: 100%;
+            max-height: 320px;
+            /* igual que .camera-view-wrapper */
+            border-radius: 12px;
+            overflow: hidden;
+            /* recorta la imagen si se pasa */
+            margin-left: auto;
+            margin-right: auto;
         }
+
         .preview-container.active {
             display: block;
             animation: slideDown 0.4s ease-out;
         }
 
         .preview-img {
-            max-width: 100%;
-            max-height: 400px;
+            width: 100%;
+            height: 100%;
+            /* llena el contenedor como el video */
+            object-fit: cover;
+            /* mismo comportamiento que la cámara */
             border-radius: 12px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            display: block;
         }
+
         .results-section {
             display: none;
         }
+
         .results-section.active {
             display: block;
             animation: fadeIn 0.5s ease-out;
         }
+
         .result-header {
             display: flex;
             justify-content: space-between;
@@ -159,14 +189,17 @@
             padding-bottom: 16px;
             border-bottom: 1px solid var(--border);
         }
+
         .result-title {
             font-size: 24px;
             font-weight: 600;
         }
+
         .main-prediction {
             text-align: center;
             margin-bottom: 40px;
         }
+
         .pred-label {
             font-size: 14px;
             color: var(--text-secondary);
@@ -174,12 +207,14 @@
             letter-spacing: 0.05em;
             margin-bottom: 8px;
         }
+
         .pred-value {
             font-size: 36px;
             font-weight: 700;
             color: var(--text-primary);
             margin-bottom: 8px;
         }
+
         .pred-confidence {
             font-size: 19px;
             color: var(--success);
@@ -189,16 +224,19 @@
         .top5-list {
             list-style: none;
         }
+
         .top5-item {
             display: flex;
             align-items: center;
             padding: 12px 0;
             border-bottom: 1px solid #f0f0f0;
         }
+
         .top5-item:last-child {
             border-bottom: none;
         }
-         .rank {
+
+        .rank {
             width: 28px;
             height: 28px;
             background: #f0f0f0;
@@ -211,24 +249,29 @@
             color: var(--text-secondary);
             margin-right: 16px;
         }
+
         .class-name {
             flex: 1;
             font-size: 17px;
             font-weight: 500;
         }
+
         .probability {
             font-size: 17px;
             color: var(--text-secondary);
             font-feature-settings: "tnum";
         }
+
         .loading {
             display: none;
             text-align: center;
             padding: 40px;
         }
+
         .loading.active {
             display: block;
         }
+
         .spinner {
             width: 40px;
             height: 40px;
@@ -238,6 +281,7 @@
             animation: spin 1s linear infinite;
             margin: 0 auto 16px;
         }
+
         @keyframes spin {
             to {
                 transform: rotate(360deg);
@@ -255,6 +299,7 @@
                 transform: translateY(0);
             }
         }
+
         @keyframes slideDown {
             from {
                 opacity: 0;
@@ -266,13 +311,251 @@
                 transform: translateY(0);
             }
         }
+
         @media (max-width: 600px) {
             h1 {
                 font-size: 36px;
             }
+
             .card {
                 padding: 24px;
             }
+        }
+
+        /* Botón tipo link para "usar cámara" */
+        .link-button {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            padding: 0 0 0 4px;
+            text-decoration: underline;
+        }
+
+        .link-button:hover {
+            color: var(--accent-hover);
+        }
+
+        /* Sección de cámara */
+        .camera-section {
+            display: none;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border);
+        }
+
+        .camera-section.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .camera-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .camera-view-wrapper {
+            position: relative;
+            width: 100%;
+            max-height: 320px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .camera-video {
+            width: 100%;
+            height: 100%;
+            background: #000;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Recuadro fijo en el centro (solo guía visual) */
+        .focus-box {
+            position: absolute;
+            top: 15%;
+            left: 15%;
+            width: 70%;
+            height: 70%;
+            border: 2px dashed rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            pointer-events: none;
+        }
+
+        /* Overlay de predicción en vivo */
+        .live-overlay {
+            position: absolute;
+            left: 16px;
+            bottom: 16px;
+            background: rgba(0, 0, 0, 0.65);
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            max-width: 80%;
+        }
+
+        .live-class {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+
+        .live-prob {
+            font-size: 13px;
+            color: #c7f7d4;
+        }
+
+        .live-status {
+            font-size: 11px;
+            color: #f1f1f1;
+            opacity: 0.8;
+            margin-top: 2px;
+        }
+
+        .camera-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .btn-primary,
+        .btn-secondary,
+        .btn-tertiary,
+        .btn-live {
+            border-radius: 999px;
+            padding: 10px 18px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: white;
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-primary:hover:not(:disabled) {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: #e5f1ff;
+            color: var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: #d6e8ff;
+            transform: translateY(-1px);
+        }
+
+        .btn-tertiary {
+            background: transparent;
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-tertiary:hover {
+            background: #f5f5f7;
+            transform: translateY(-1px);
+        }
+
+        .btn-live {
+            background: #111827;
+            color: #f9fafb;
+        }
+
+        .btn-live.live-on {
+            background: #16a34a;
+        }
+
+        .btn-live:hover {
+            transform: translateY(-1px);
+        }
+
+        .camera-help {
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        /* History Section Styles */
+        .history-section {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .history-section.active {
+            display: block;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .history-count {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th {
+            text-align: left;
+            padding: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .history-table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .history-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .badge-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #e5f1ff;
+            color: var(--accent);
+            font-weight: 600;
+            border-radius: 12px;
+            padding: 4px 10px;
+            font-size: 13px;
         }
     </style>
 </head>
@@ -283,25 +566,61 @@
             <h1>Clasificador IA</h1>
             <p class="subtitle">Identificación inteligente de herramientas.</p>
         </header>
+
         <div class="card">
             <form id="upload-form">
                 <div class="upload-area" id="drop-zone">
                     <span class="upload-icon">📷</span>
                     <p class="upload-text">Arrastra una imagen aquí</p>
-                    <p class="upload-subtext">o haz clic para seleccionar</p>
+                    <p class="upload-subtext">
+                        o haz clic para seleccionar
+                        <button type="button" id="camera-btn" class="link-button">o usar cámara</button>
+                    </p>
                     <input type="file" id="file-input" name="file" accept="image/*" required>
                 </div>
+
+                <!-- Sección de cámara -->
+                <div class="camera-section" id="camera-section">
+                    <h3 class="camera-title">Cámara en vivo</h3>
+
+                    <div class="camera-view-wrapper">
+                        <video id="video" autoplay playsinline class="camera-video"></video>
+                        <div class="focus-box"></div>
+                        <div class="live-overlay" id="live-overlay">
+                            <div class="live-class" id="live-class">Sin herramienta detectada</div>
+                            <div class="live-prob" id="live-prob">Probabilidad: -</div>
+                            <div class="live-status" id="live-status">Modo en vivo apagado</div>
+                        </div>
+                    </div>
+
+                    <div class="camera-actions">
+                        <button type="button" id="start-camera-btn" class="btn-secondary">Iniciar cámara</button>
+                        <button type="button" id="capture-btn" class="btn-primary" disabled>Tomar foto</button>
+                        <button type="button" id="live-toggle-btn" class="btn-live" disabled>Modo en vivo</button>
+                        <button type="button" id="close-camera-btn" class="btn-tertiary">Cerrar cámara</button>
+                    </div>
+
+                    <p class="camera-help">
+                        Coloca la herramienta dentro del recuadro. Puedes tomar una foto o activar el modo en vivo para
+                        ver la clase y probabilidad en tiempo real.
+                    </p>
+                </div>
+
+                <!-- Vista previa (foto tomada o imagen subida) -->
                 <div class="preview-container" id="preview-container">
                     <img id="preview-img" class="preview-img" src="" alt="Vista previa">
                 </div>
+
                 <button type="submit" class="btn" id="submit-btn" disabled>Analizar Imagen</button>
             </form>
         </div>
+
         <div class="loading" id="loading">
             <div class="spinner"></div>
             <p style="color: var(--text-secondary);">Procesando imagen...</p>
         </div>
-         <div class="card results-section" id="results">
+
+        <div class="card results-section" id="results">
             <div class="result-header">
                 <h2 class="result-title">Resultados</h2>
             </div>
@@ -315,142 +634,431 @@
             <div style="margin-top: 30px;">
                 <p class="pred-label" style="margin-bottom: 16px;">Otras posibilidades</p>
                 <ul class="top5-list" id="top5-list">
-                    <!-- Items will be injected here -->
+                    <!-- Items inyectados dinámicamente -->
                 </ul>
             </div>
         </div>
+
+        <!-- History Section (Aggregated Table) -->
+        <div class="card history-section" id="history-section">
+            <div class="history-header">
+                <h3 class="history-title">Herramientas Detectadas</h3>
+                <span class="history-count" id="history-count">0 únicas</span>
+            </div>
+
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Herramienta</th>
+                        <th>Última Hora</th>
+                        <th>Confianza</th>
+                        <th>Cantidad</th>
+                    </tr>
+                </thead>
+                <tbody id="history-body">
+                    <!-- Rows injected via JS -->
+                </tbody>
+            </table>
+        </div>
     </div>
+
     <script>
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-input');
-    const previewContainer = document.getElementById('preview-container');
-    const previewImg = document.getElementById('preview-img');
-    const submitBtn = document.getElementById('submit-btn');
-    const uploadForm = document.getElementById('upload-form');
-    const loading = document.getElementById('loading');
-    const results = document.getElementById('results');
-    const mainClass = document.getElementById('main-class');
-    const mainConf = document.getElementById('main-conf');
-    const top5List = document.getElementById('top5-list');
+        const dropZone = document.getElementById('drop-zone');
+        const fileInput = document.getElementById('file-input');
+        const previewContainer = document.getElementById('preview-container');
+        const previewImg = document.getElementById('preview-img');
+        const submitBtn = document.getElementById('submit-btn');
+        const uploadForm = document.getElementById('upload-form');
+        const loading = document.getElementById('loading');
+        const results = document.getElementById('results');
+        const mainClass = document.getElementById('main-class');
+        const mainConf = document.getElementById('main-conf');
+        const top5List = document.getElementById('top5-list');
 
-    // CLICK en el área -> abre el input
-    dropZone.addEventListener('click', () => fileInput.click());
+        // History Elements
+        const historySection = document.getElementById('history-section');
+        const historyBody = document.getElementById('history-body');
+        const historyCount = document.getElementById('history-count');
+        let detectedTools = []; // Array of { toolName, lastSeen, quantity, confidence }
 
-    // DRAG & DROP
-    dropZone.addEventListener('dragover', (e) => {
-        e.preventDefault();
-        dropZone.classList.add('dragover');
-    });
+        // Elementos de cámara
+        const cameraBtn = document.getElementById('camera-btn');
+        const cameraSection = document.getElementById('camera-section');
+        const video = document.getElementById('video');
+        const startCameraBtn = document.getElementById('start-camera-btn');
+        const captureBtn = document.getElementById('capture-btn');
+        const closeCameraBtn = document.getElementById('close-camera-btn');
+        const liveToggleBtn = document.getElementById('live-toggle-btn');
 
-    dropZone.addEventListener('dragleave', () => {
-        dropZone.classList.remove('dragover');
-    });
+        const liveClass = document.getElementById('live-class');
+        const liveProb = document.getElementById('live-prob');
+        const liveStatus = document.getElementById('live-status');
 
-    dropZone.addEventListener('drop', (e) => {
-        e.preventDefault();
-        dropZone.classList.remove('dragover');
+        let cameraStream = null;
+        let liveMode = false;
+        let liveInterval = null;
+        let isPredictingLive = false;
 
-        if (e.dataTransfer.files.length) {
-            fileInput.files = e.dataTransfer.files;
-            handleFile(fileInput.files[0]);
-        }
-    });
+        // Umbral para considerar que "no hay herramienta clara" en modo en vivo
+        const LIVE_CONF_THRESHOLD = 0.8; // 80%
 
-    // Cambio del input de archivo
-    fileInput.addEventListener('change', () => {
-        if (fileInput.files.length) {
-            handleFile(fileInput.files[0]);
-        }
-    });
+        // CLICK en el área -> abre el input
+        dropZone.addEventListener('click', () => fileInput.click());
 
-    // Mostrar vista previa y habilitar botón
-    function handleFile(file) {
-        if (!file.type.startsWith('image/')) {
-            alert('Por favor sube una imagen válida.');
-            return;
-        }
-
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            previewImg.src = e.target.result;
-            previewContainer.classList.add('active');
-            submitBtn.disabled = false;
-
-            // Reset resultados
-            results.classList.remove('active');
-        };
-        reader.readAsDataURL(file);
-    }
-
-    // Envío del formulario al backend Flask
-    uploadForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-
-        const formData = new FormData(uploadForm);
-
-        // UI: estado de carga
-        submitBtn.disabled = true;
-        loading.classList.add('active');
-        results.classList.remove('active');
-
-        try {
-            const response = await fetch('/predict', {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await response.json();
-
-            if (data.error) {
-                throw new Error(data.error);
-            }
-
-            displayResults(data);
-
-        } catch (error) {
-            alert('Error: ' + error.message);
-        } finally {
-            loading.classList.remove('active');
-            submitBtn.disabled = false;
-        }
-    });
-
-    // Mostrar resultados
-    function displayResults(data) {
-        mainClass.textContent = data.pred_class;
-        mainConf.textContent = (data.pred_prob * 100).toFixed(1) + '% de confianza';
-
-        top5List.innerHTML = '';
-
-        // Saltamos la primera porque es la principal
-        const others = data.top5.slice(1);
-        others.forEach((item, index) => {
-            const li = document.createElement('li');
-            li.className = 'top5-item';
-            li.innerHTML = `
-                <div class="rank">${index + 2}</div>
-                <div class="class-name">${item.class}</div>
-                <div class="probability">${(item.prob * 100).toFixed(1)}%</div>
-            `;
-            top5List.appendChild(li);
+        // DRAG & DROP
+        dropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropZone.classList.add('dragover');
         });
 
-        results.classList.add('active');
-        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-</script>
+        dropZone.addEventListener('dragleave', () => {
+            dropZone.classList.remove('dragover');
+        });
 
+        dropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropZone.classList.remove('dragover');
+
+            if (e.dataTransfer.files.length) {
+                fileInput.files = e.dataTransfer.files;
+                handleFile(fileInput.files[0]);
+            }
+        });
+
+        // Cambio del input de archivo
+        fileInput.addEventListener('change', () => {
+            if (fileInput.files.length) {
+                handleFile(fileInput.files[0]);
+            }
+        });
+
+        // Mostrar vista previa y habilitar botón
+        function handleFile(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor sube una imagen válida.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                previewImg.src = e.target.result;
+                previewContainer.classList.add('active');
+                submitBtn.disabled = false;
+
+                // Reset resultados
+                results.classList.remove('active');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Envío del formulario al backend Flask (imagen subida / foto tomada)
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(uploadForm);
+
+            submitBtn.disabled = true;
+            loading.classList.add('active');
+            results.classList.remove('active');
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+
+                displayResults(data);
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                loading.classList.remove('active');
+                submitBtn.disabled = false;
+            }
+        });
+
+        // Mostrar resultados globales (sección inferior)
+        function displayResults(data) {
+            mainClass.textContent = data.pred_class;
+            mainConf.textContent = (data.pred_prob * 100).toFixed(1) + '% de confianza';
+
+            top5List.innerHTML = '';
+
+            const others = data.top5.slice(1);
+            others.forEach((item, index) => {
+                const li = document.createElement('li');
+                li.className = 'top5-item';
+                li.innerHTML = `
+                    <div class="rank">${index + 2}</div>
+                    <div class="class-name">${item.class}</div>
+                    <div class="probability">${(item.prob * 100).toFixed(1)}%</div>
+                `;
+                top5List.appendChild(li);
+            });
+
+            results.classList.add('active');
+            results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            // Add to history (aggregated)
+            updateDetectedTools(data);
+        }
+
+        // === HISTORY LOGIC (Aggregated) ===
+        function updateDetectedTools(data) {
+            const toolName = data.pred_class;
+            const confidence = data.pred_prob;
+            const now = new Date();
+
+            // Check if exists
+            const existingIndex = detectedTools.findIndex(t => t.toolName === toolName);
+
+            if (existingIndex !== -1) {
+                // Case A: Update existing
+                detectedTools[existingIndex].quantity += 1;
+                detectedTools[existingIndex].lastSeen = now;
+                detectedTools[existingIndex].confidence = confidence;
+
+                // Move to top (optional, but good for UX)
+                const item = detectedTools.splice(existingIndex, 1)[0];
+                detectedTools.unshift(item);
+            } else {
+                // Case B: Add new
+                const newEntry = {
+                    toolName: toolName,
+                    lastSeen: now,
+                    quantity: 1,
+                    confidence: confidence
+                };
+                detectedTools.unshift(newEntry);
+            }
+
+            renderHistoryTable();
+        }
+
+        function renderHistoryTable() {
+            if (detectedTools.length === 0) {
+                historySection.classList.remove('active');
+                return;
+            }
+
+            historySection.classList.add('active');
+            historyCount.textContent = `${detectedTools.length} únicas`;
+            historyBody.innerHTML = '';
+
+            detectedTools.forEach(item => {
+                const tr = document.createElement('tr');
+
+                const timeString = item.lastSeen.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                const confPercent = (item.confidence * 100).toFixed(1) + '%';
+
+                tr.innerHTML = `
+                    <td style="font-weight: 500;">${item.toolName}</td>
+                    <td style="color: var(--text-secondary);">${timeString}</td>
+                    <td style="font-family: monospace;">${confPercent}</td>
+                    <td><span class="badge-count">${item.quantity}</span></td>
+                `;
+                historyBody.appendChild(tr);
+            });
+        }
+
+        // === LÓGICA DE CÁMARA ===
+
+        async function startCamera() {
+            try {
+                if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                    alert('Tu navegador no soporta acceso a la cámara.');
+                    return;
+                }
+
+                cameraSection.classList.add('active');
+
+                cameraStream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = cameraStream;
+
+                captureBtn.disabled = false;
+                liveToggleBtn.disabled = false;
+                liveStatus.textContent = 'Cámara iniciada. Modo en vivo apagado.';
+            } catch (err) {
+                console.error(err);
+                alert('No se pudo acceder a la cámara. Verifica los permisos del navegador.');
+            }
+        }
+
+        function stopCamera() {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+                cameraStream = null;
+            }
+            video.srcObject = null;
+            captureBtn.disabled = true;
+            liveToggleBtn.disabled = true;
+            stopLivePrediction();
+            cameraSection.classList.remove('active');
+
+            liveClass.textContent = 'Sin herramienta detectada';
+            liveProb.textContent = 'Probabilidad: -';
+            liveStatus.textContent = 'Modo en vivo apagado';
+        }
+
+        function startLivePrediction() {
+            if (liveInterval || !cameraStream) return;
+
+            liveMode = true;
+            liveToggleBtn.classList.add('live-on');
+            liveToggleBtn.textContent = 'Detener modo en vivo';
+            liveStatus.textContent = 'Analizando en tiempo real...';
+
+            // Capturamos un frame cada 1.5 segundos
+            liveInterval = setInterval(captureAndPredictLive, 1500);
+        }
+
+        function stopLivePrediction() {
+            liveMode = false;
+            if (liveInterval) {
+                clearInterval(liveInterval);
+                liveInterval = null;
+            }
+            isPredictingLive = false;
+            liveToggleBtn.classList.remove('live-on');
+            liveToggleBtn.textContent = 'Modo en vivo';
+            if (cameraStream) {
+                liveStatus.textContent = 'Cámara iniciada. Modo en vivo apagado.';
+            } else {
+                liveStatus.textContent = 'Modo en vivo apagado';
+            }
+        }
+
+        // Captura el frame completo y envía al modelo (modo en vivo)
+        function captureAndPredictLive() {
+            if (!cameraStream || isPredictingLive) return;
+
+            const videoWidth = video.videoWidth || 0;
+            const videoHeight = video.videoHeight || 0;
+            if (videoWidth === 0 || videoHeight === 0) {
+                return;
+            }
+
+            isPredictingLive = true;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+            canvas.toBlob(async (blob) => {
+                if (!blob) {
+                    isPredictingLive = false;
+                    return;
+                }
+
+                try {
+                    const formData = new FormData();
+                    formData.append('file', blob, 'live_frame.png');
+
+                    const response = await fetch('/predict', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    const data = await response.json();
+                    if (data.error) {
+                        console.error(data.error);
+                        liveStatus.textContent = 'Error en modo en vivo';
+                    } else {
+                        const prob = data.pred_prob;
+
+                        if (prob < LIVE_CONF_THRESHOLD) {
+                            // Confianza baja: asumimos que no hay herramienta clara
+                            liveClass.textContent = 'Sin herramienta detectada';
+                            liveProb.textContent = 'Probabilidad: -';
+                            liveStatus.textContent = 'Puede no haber herramienta en la imagen.';
+                        } else {
+                            // Confianza alta: mostramos clase y probabilidad
+                            liveClass.textContent = data.pred_class;
+                            liveProb.textContent = 'Probabilidad: ' + (prob * 100).toFixed(1) + '%';
+                            liveStatus.textContent = 'Analizando en tiempo real...';
+                        }
+                    }
+                } catch (err) {
+                    console.error(err);
+                    liveStatus.textContent = 'Error en modo en vivo';
+                } finally {
+                    isPredictingLive = false;
+                }
+            }, 'image/png');
+        }
+
+        // Mostrar sección de cámara
+        cameraBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            cameraSection.classList.add('active');
+        });
+
+        // Iniciar cámara
+        startCameraBtn.addEventListener('click', () => {
+            startCamera();
+        });
+
+        // Cerrar cámara
+        closeCameraBtn.addEventListener('click', () => {
+            stopCamera();
+        });
+
+        // Activar / desactivar modo en vivo
+        liveToggleBtn.addEventListener('click', () => {
+            if (!cameraStream) {
+                alert('Primero debes iniciar la cámara.');
+                return;
+            }
+
+            if (liveMode) {
+                stopLivePrediction();
+            } else {
+                startLivePrediction();
+            }
+        });
+
+        // Capturar foto desde el video (para usar el flujo normal de arriba)
+        captureBtn.addEventListener('click', () => {
+            if (!cameraStream) {
+                alert('Primero debes iniciar la cámara.');
+                return;
+            }
+
+            const videoWidth = video.videoWidth || 640;
+            const videoHeight = video.videoHeight || 480;
+
+            const canvas = document.createElement('canvas');
+            canvas.width = videoWidth;
+            canvas.height = videoHeight;
+
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, videoWidth, videoHeight);
+
+            canvas.toBlob((blob) => {
+                if (!blob) {
+                    alert('No se pudo capturar la imagen.');
+                    return;
+                }
+
+                const file = new File([blob], 'captura.png', { type: 'image/png' });
+
+                const dt = new DataTransfer();
+                dt.items.add(file);
+                fileInput.files = dt.files;
+
+                handleFile(file);
+            }, 'image/png');
+        });
+    </script>
 </body>
 
 </html>
-                
-
-
-
-
-
-
-        
-
-
-
